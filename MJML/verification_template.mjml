@@ -1,0 +1,25 @@
+<mjml>
+  <mj-body>
+    <mj-section>
+      <mj-column>
+				<mj-text align="center">
+        	<h1 style="background:#16a596;padding:10px;">Employee OTP Verification</h1>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="50px 0px" border="1px solid grey">
+    	<mj-group>
+      	<mj-column>
+      	<mj-text align="center" font-size="20px" font-weight="bold" color="green">
+        	EMPLOYEE OTP
+        </mj-text>
+      </mj-column>
+        <mj-column>
+      	<mj-text align="center" font-size="18px" font-weight="bold">
+        	<div style="background:black;color:white;width:65px;padding:3px">123477</div>
+        </mj-text>
+      </mj-column>
+      </mj-group>
+    </mj-section>
+  </mj-body>
+</mjml>

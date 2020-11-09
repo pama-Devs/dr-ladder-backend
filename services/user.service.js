@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-exports.getUserForm = (query) => {
+exports.getUserData = (query) => {
         return User.findOne(query)
         .exec();
 }

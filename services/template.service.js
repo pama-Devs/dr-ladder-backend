@@ -2,71 +2,116 @@ const path = require('path');
 const nunjucks = require('nunjucks');
 const MailService = require('./mail.service');
 const UserService = require('./user.service');
-const HireService = require('./hireus.service');
+
+const HireFormService = require('./hireForm.service');
+const JoinUsService = require('./joinUs.service');
 
 const TEMPLATE_PATH = path.resolve(__dirname, "../templates"); 
 nunjucks.configure(TEMPLATE_PATH, { autoescape: true });
 
-exports.contactFormTemplate = async(userMail) => {
+exports.userOtpTemplate = async(userData) => {
     try {
-        const userFormData = await UserService.getUserForm({ email: userMail });
-        console.log(userFormData);
-        console.log(`Sending Email to ${userMail}`);
+        const data = await UserService.getUserData({ email: userData.email });
+        console.log(`Sending Email to minhaj.pamanetwork@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: userMail,
+            to: 'minhaj.pamanetwork@gmail.com',
             subject: 'Test Email',
-            html: TemplateForm(userFormData)
+            html: TemplateForUserOtp(data.otp)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to ${userMail}`);
+            console.log(`Email Sent Successfully to minhaj.pamanetwork@gmail.com`);
         } 
     } catch(err) {
         console.log('Error', err);
     }
 }
 
-const TemplateForm = (data) => {
-    console.log('data', data);
-    const profile_pic = `http://localhost:5000/uploads/${data.photo}`;
-    const resumeLink = `http://localhost:5000/uploads/${data.resume}`;
-    return nunjucks.render('form_template.html', {
-        data,
-        resumeLink,
-        profile_pic
+exports.userResendOtpTemplate = async(otp) => {
+    try {
+        console.log(`Sending Email to minhaj.pamanetwork@gmail.com`);
+        const emailOptions = {
+            from: process.env.SENDER_MAIL,
+            to: 'minhaj.pamanetwork@gmail.com',
+            subject: 'Test Email',
+            html: TemplateForUserOtp(otp)
+        }
+        const sendMail = await MailService.sendMail(emailOptions);
+        if(sendMail) {
+            console.log(`Email Sent Successfully to minhaj.pamanetwork@gmail.com`);
+        } 
+    } catch(err) {
+        console.log('Error', err);
+    }
+}
+
+const TemplateForUserOtp = (otp) => {
+    console.log('data', otp);
+    return nunjucks.render('verification_template.html', {
+        otp: otp
     });
 }
 
-exports.hireUsFormTemplate = async(userMail) => {
+exports.hireFormTemplate = async(userMail) => {
     try {
-        const hireUsFormData = await UserService.HireService({ email: userMail });
-        console.log(userFormData);
-        console.log(`Sending Email to ${userMail}`);
+        const hireFormData = await HireFormService.getHireForm({ email: userMail });
+        console.log(`Sending Email to minazuddin23@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: userMail,
+            to: 'minazuddin23@gmail.com',
             subject: 'Test Email',
-            html: HireUsTemplateForm(hireUsFormData)
+            html: TemplateForHireForm(hireFormData)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to ${userMail}`);
+            console.log(`Email Sent Successfully to minazuddin23@gmail.com`);
         } 
     } catch(err) {
         console.log('Error', err);
     }
 }
 
-const HireUsTemplateForm = (data) => {
-    const profile_pic = `http://localhost:5000/uploads/${data.photo}`;
-    const resumeLink = `http://localhost:5000/uploads/${data.resume}`;
-    return nunjucks.render('hire_us_form_template.html', {
+const TemplateForHireForm = (data) => {
+    return nunjucks.render('hire_form_template.html', {
         form: {
             name: data.name,
             email: data.email,
             subject: data.subject,
-            message: data.subject
+            message: data.message
         }
     });
 }
+
+exports.joinUsFormTemplate = async(userMail) => {
+    try {
+        const joinUsFormData = await JoinUsService.getJoinUsForm({ email: userMail });
+        console.log(`Sending Email to minazuddin23@gmail.com`);
+        const emailOptions = {
+            from: process.env.SENDER_MAIL,
+            to: 'minazuddin23@gmail.com',
+            subject: 'Test Email',
+            html: TemplateForJoinUsForm(joinUsFormData)
+        }
+        const sendMail = await MailService.sendMail(emailOptions);
+        if(sendMail) {
+            console.log(`Email Sent Successfully to minazuddin23@gmail.com`);
+        } 
+    } catch(err) {
+        console.log('Error', err);
+    }
+}
+
+const TemplateForJoinUsForm = (data) => {
+    return nunjucks.render('join_form_template.html', {
+        form: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email,
+            contact: data.contact,
+            preferrable_location: data.preferrable_location,
+            position: data.position
+        }
+    });
+}
+
