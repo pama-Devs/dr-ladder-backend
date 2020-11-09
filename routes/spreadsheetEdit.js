@@ -45,7 +45,6 @@ router.post('/', upload.single(''), (req, res, next) => {
         if(err) {
             console.log(err);
         } else {
-            console.log('connected');
             editSheet(client, form);
         }
     });

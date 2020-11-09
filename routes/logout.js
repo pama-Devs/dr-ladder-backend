@@ -6,9 +6,8 @@ const UserLoggerTrack = require('../models/userLoggerTrack')
 router.post('/:token', (req, res, next) => {
     // User.update({ token: req.params.token }, { $set: { isLoggedIn: false, token: '' } })
     // .exec();
-    User.update({ token: req.params.token }, { $set: {isLoggedIn: false } })
-    .exec()
-    .then(user => {
+    User.updateOne({ token: req.params.token }, { $set: {isLoggedIn: false } })
+    .exec();
         User.findOne({token: req.params.token})
         .exec()
         .then(result => {
@@ -31,19 +30,20 @@ router.post('/:token', (req, res, next) => {
                 }
             }
 
-            UserLoggerTrack.update({userEmailId: result.email, date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`}, { $set: { outTime:  `${userLogDetails.hours}:${userLogDetails.min}`}})
+            UserLoggerTrack.updateOne({userEmailId: result.email, date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`}, { $set: { outTime:  `${userLogDetails.hours}:${userLogDetails.min}`}})
             .exec()
             .then(doSomething => {
                 UserLoggerTrack.findOne({userEmailId: result.email, date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`})
                 .exec()
                 .then(finalResult => {
+                    console.log('outTime', finalResult.outTime);
                     res.status(200).json({
                         message: 'Logged Out Successfully',
                         result: finalResult
                     })
+                    console.log('finalresult', finalResult)
                 })
             });
-        })
     })
     .catch(err => {
         res.status(500).json({

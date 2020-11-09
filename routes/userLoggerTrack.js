@@ -23,10 +23,11 @@ router.get('/', (req, res, next) => {
 //write data to sheet
 router.post('/', (req, res, next) => {
     UserLoggerTrack.find({})
-    .select('userEmailId date inTime outTime')
+    .select('userEmailId date inTime outTime breakTime')
     .exec()
     .then(result => {
         //create client
+        console.log(result);
         const client = new google.auth.JWT({
             email: keys.client_email,
             keyFile: null,
@@ -39,7 +40,6 @@ router.post('/', (req, res, next) => {
         if(err) {
             console.log(err);
         } else {
-            console.log('connected');
             editSheet(client);
         }
     });
@@ -53,7 +53,7 @@ router.post('/', (req, res, next) => {
         // append rows
         const updateData = [];
         for(let item of result) {
-                const data = [item.userEmailId, item.date, item.inTime, item.outTime];
+                const data = [item.userEmailId, item.date, item.inTime, item.outTime, item.breakTime];
                 updateData.push(data);
         }
         const update = {
@@ -64,7 +64,7 @@ router.post('/', (req, res, next) => {
                 values: updateData
             }
         };
-        const appendResult = await gsapi.spreadsheets.values.update(update);
+        const updateResult = await gsapi.spreadsheets.values.update(update);
         res.status(200).json({
             message: 'attendace form submitted'
         })

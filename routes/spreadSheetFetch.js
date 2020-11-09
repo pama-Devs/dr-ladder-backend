@@ -27,7 +27,6 @@ router.get('/:tab', upload.single(''), (req, res, next) => {
         if(err) {
             console.log(err);
         } else {
-            console.log('connected');
             getSheet(client, req.params.tab);
         }
     })

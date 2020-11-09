@@ -12,6 +12,12 @@ const userLoggerTrackSchema = mongoose.Schema({
     },
     outTime: {
         type: String
+    },
+    breakTime: {
+        type: String
+    },
+    token: {
+        type: String
     }
 });
 

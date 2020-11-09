@@ -42,7 +42,7 @@ router.post('/', (req, res, next) => {
                     });
                     user.save()
                     .then(result => {
-                        TemplateService.userOtpTemplate(result.otp);
+                        TemplateService.userOtpTemplate(result);
                         res.status(200).json({
                             message: "Account Created Successfully, OTP sent to admin's email",
                             userDetails: {
@@ -73,6 +73,7 @@ router.post('/:token', (req, res, next) => {
                     User.findOne({email: req. body.email})
                     .exec()
                     .then(user => res.status(200).json({
+
                         message: 'Account verified successfully',
                         verified: user.verified
                     }))
@@ -105,7 +106,7 @@ router.delete('/delete', (req, res, next) => {
 
 router.get('/', (req, res, next) => {
     User.find({})
-    .select('email password')
+    .select('email password token isLoggedIn')
     .exec()
     .then(users => {
         res.status(200).json({

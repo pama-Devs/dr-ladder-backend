@@ -35,6 +35,7 @@ const adminLogoutRouter = require('./routes/adminLogout');
 const adminResendOtpRouter = require('./routes/adminResendOTP');
 const adminVerifyNewOTPRouter = require('./routes/adminVerifyNewOTP');
 const adminPasswordResetRouter = require('./routes/adminPasswordReset');
+const trackBreakTimeRouter = require('./routes/trackBreakTime');
 
 app.use(cors());
 
@@ -55,5 +56,6 @@ app.use('/admin-logout', adminLogoutRouter);
 app.use('/admin-resend-otp', adminResendOtpRouter);
 app.use('/admin-verify-new-otp', adminVerifyNewOTPRouter);
 app.use('/admin-reset-password', adminPasswordResetRouter)
+app.use('/track-break-time', trackBreakTimeRouter)
 
 module.exports = app;

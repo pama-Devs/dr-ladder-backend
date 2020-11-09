@@ -24,7 +24,8 @@ router.post('/', (req, res, next) => {
                         })
                      }}).exec();
                      //update log status
-                        User.update({ email: user.email }, {$set: {isLoggedIn: true }}).exec();
+                        User.update({ email: user.email }, {$set: {isLoggedIn: true }}).exec()
+                        .then();
                         User.findOne({email: user.email})
                         .exec()
                         .then(userData => {
@@ -52,7 +53,9 @@ router.post('/', (req, res, next) => {
                                 userEmailId: user.email,
                                 date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`,
                                 inTime: `${userLogDetails.hours}:${userLogDetails.min}`,
-                                outTime: ''
+                                outTime: '',
+                                breakTime: '',
+                                token: jwt.sign({ userEmailId: user.email }, 'secret', { expiresIn: '1d'})
                             })
                             loggerTrack.save()
                             .then(userResult => {
@@ -60,7 +63,8 @@ router.post('/', (req, res, next) => {
                                     message: 'Logged In Successfully',
                                     verified: userData.verified,
                                     isLoggedIn: userData.isLoggedIn,
-                                    token: userData.token
+                                    token: userData.token,
+                                    breakToken: userResult.token
                                 })
                             })
                         })
