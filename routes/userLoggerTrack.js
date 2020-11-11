@@ -27,7 +27,6 @@ router.post('/', (req, res, next) => {
     .exec()
     .then(result => {
         //create client
-        console.log(result);
         const client = new google.auth.JWT({
             email: keys.client_email,
             keyFile: null,

@@ -49,24 +49,26 @@ router.post('/', (req, res, next) => {
                                 }
                             }
 
-                            const loggerTrack = new UserLoggerTrack({
-                                userEmailId: user.email,
-                                date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`,
-                                inTime: `${userLogDetails.hours}:${userLogDetails.min}`,
-                                outTime: '',
-                                breakTime: '',
-                                token: jwt.sign({ userEmailId: user.email }, 'secret', { expiresIn: '1d'})
-                            })
-                            loggerTrack.save()
-                            .then(userResult => {
-                                res.status(200).json({
-                                    message: 'Logged In Successfully',
-                                    verified: userData.verified,
-                                    isLoggedIn: userData.isLoggedIn,
-                                    token: userData.token,
-                                    breakToken: userResult.token
+                            if(!userData.isLogOutFailure) {
+                                const loggerTrack = new UserLoggerTrack({
+                                    userEmailId: user.email,
+                                    date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`,
+                                    inTime: `${userLogDetails.hours}:${userLogDetails.min}`,
+                                    outTime: '',
+                                    breakTime: '',
+                                    token: jwt.sign({ userEmailId: user.email }, 'secret', { expiresIn: '1d'})
                                 })
-                            })
+                                loggerTrack.save()
+                                .then(userResult => {
+                                    res.status(200).json({
+                                        message: 'Logged In Successfully',
+                                        verified: userData.verified,
+                                        isLoggedIn: userData.isLoggedIn,
+                                        token: userData.token,
+                                        breakToken: userResult.token
+                                    })
+                                })
+                            }
                         })
                     } else {
                         return res.status(201).json({

@@ -15,13 +15,13 @@ exports.userOtpTemplate = async(userData) => {
         console.log(`Sending Email to minhaj.pamanetwork@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: 'minhaj.pamanetwork@gmail.com',
-            subject: 'Test Email',
+            to: 'connectprabhu01@gmail.com',
+            subject: 'OTP EMAIL',
             html: TemplateForUserOtp(data.otp)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to minhaj.pamanetwork@gmail.com`);
+            console.log(`Email Sent Successfully to connectprabhu01@gmail.com`);
         } 
     } catch(err) {
         console.log('Error', err);
@@ -33,13 +33,13 @@ exports.userResendOtpTemplate = async(otp) => {
         console.log(`Sending Email to minhaj.pamanetwork@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: 'minhaj.pamanetwork@gmail.com',
-            subject: 'Test Email',
+            to: 'connectprabhu01@gmail.com',
+            subject: 'OTP EMAIL',
             html: TemplateForUserOtp(otp)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to minhaj.pamanetwork@gmail.com`);
+            console.log(`Email Sent Successfully to connectprabhu01@gmail.com`);
         } 
     } catch(err) {
         console.log('Error', err);
@@ -59,13 +59,13 @@ exports.hireFormTemplate = async(userMail) => {
         console.log(`Sending Email to minazuddin23@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: 'minazuddin23@gmail.com',
-            subject: 'Test Email',
+            to: 'varun@pamanetwork.com',
+            subject: 'OTP EMAIL',
             html: TemplateForHireForm(hireFormData)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to minazuddin23@gmail.com`);
+            console.log(`Email Sent Successfully to varun@pamanetwork.com`);
         } 
     } catch(err) {
         console.log('Error', err);
@@ -89,13 +89,13 @@ exports.joinUsFormTemplate = async(userMail) => {
         console.log(`Sending Email to minazuddin23@gmail.com`);
         const emailOptions = {
             from: process.env.SENDER_MAIL,
-            to: 'minazuddin23@gmail.com',
-            subject: 'Test Email',
+            to: 'varun@pamanetwork.com',
+            subject: 'OTP EMAIL',
             html: TemplateForJoinUsForm(joinUsFormData)
         }
         const sendMail = await MailService.sendMail(emailOptions);
         if(sendMail) {
-            console.log(`Email Sent Successfully to minazuddin23@gmail.com`);
+            console.log(`Email Sent Successfully to varun@pamanetwork.com`);
         } 
     } catch(err) {
         console.log('Error', err);

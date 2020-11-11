@@ -21,6 +21,9 @@ const userSchema = mongoose.Schema({
     },
     isLoggedIn: {
         type: Boolean
+    },
+    isLogOutFailure: {
+        type: Boolean
     }
 });
 

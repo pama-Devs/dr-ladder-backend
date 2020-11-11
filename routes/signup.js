@@ -38,7 +38,8 @@ router.post('/', (req, res, next) => {
                         }),
                         verified: false,
                         otp: crypto({length: 6, type: 'numeric'}),
-                        isLoggedIn: false
+                        isLoggedIn: false,
+                        isLogOutFailure: false
                     });
                     user.save()
                     .then(result => {

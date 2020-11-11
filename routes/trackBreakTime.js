@@ -8,26 +8,85 @@ const keys = require('../client_secret.json');
 const sheets = require('../sheets');
 
 router.post('/:token', (req, res, next) => {
-    let timer = 0, breakTime = 0;
+    let timer = 0, breakTime = 0, timerSec = 0, timerMin = 0, timerHour = 0, inputTimer = 0;
     UserLoggerTrack.findOne({ token: req.params.token })
     .exec()
     .then(data => {
         timer = data.breakTime;
-    })
-    .catch(err => res.status(500).json({
-        message: err
-    }))
-        if(req.body.timer >= 3600) {
-            timer += req.body.timer;
-            const hour = (timer/3600).toFixed(2);
-            const min = (timer%3600).toFixed(2);
-            breakTime = `${hour} hr ${min} min`
-        } else if(req.body.timer <= 60) {
-            timer += req.body.timer;
-            breakTime = `${timer} sec`;
-        } else {
-            timer += req.body.timer;
-            breakTime = `${(timer/60).toFixed(2)} min`;
+        inputTimer = req.body.timer;
+        if(inputTimer <= 60) {
+            if(timer.includes("sec")) {
+                inputTimer += Number(timer.split(" ")[0]);
+                breakTime = `${inputTimer} sec`;
+            }
+            if(timer.includes("min") && !timer.includes("hr")) {
+                inputTimer += Number(timer.split(" ")[0]) * 60;
+                let resultInMin = (inputTimer / 60);
+                if(resultInMin >= 60) {
+                    breakTime = `${(resultInMin/60).toFixed(0)} hr`
+                } else {
+                    breakTime = `${resultInMin} min`;
+                }
+            }
+            if(timer.includes("hr")) {
+                let hour = Number(timer.split(" ")[0]);
+                let min = Number(timer.split(" ")[2]);
+                if(min >= 60) {
+                    hour += 1;
+                }
+                let hh = (hour * 3600);
+                let mm = (min * 60);
+                let result = hh + mm + inputTimer;
+                let HH = (result/3600).toFixed(3);
+                let hhh = HH.split(".")[0];
+                let mmm = HH.split(".")[1].split("")[1];
+                breakTime = `${hhh} hr ${mmm} min`;
+            }
+            else {
+                breakTime = `${inputTimer} sec`;
+            }
+        }
+        if(inputTimer >= 60 && inputTimer < 3600) {
+            if(timer.includes("sec")) {
+                inputTimer += Number(timer.split(" ")[0]);
+            }
+            if(timer.includes("min") && !timer.includes("hr")) {
+                inputTimer += Number(timer.split(" ")[0]);
+            }
+            if(timer.includes("hr")) {
+                let hour = Number(timer.split(" ")[0]);
+                let min = Number(timer.split(" ")[2]);
+                if(min >= 60) {
+                    hour += 1;
+                }
+                let hh = (hour * 3600);
+                let mm = (min * 60);
+                let result = hh + mm + inputTimer;
+                let HH = (result/3600).toFixed(3);
+                let hhh = HH.split(".")[0];
+                let mmm = HH.split(".")[1].split("")[1];
+                breakTime = `${hhh} hr ${mmm} min`;
+            }
+            inputTimer = (inputTimer/60).toFixed(0);
+            breakTime = `${inputTimer} min`;
+        }
+        if(inputTimer >= 3600) {
+            if(timer.includes("hr")) {
+                let hh = Number(timer.split(" ")[0]) * 3600;
+                let mm = Number(timer.split(" ")[2]) * 60;
+                let result = (hh + mm + inputTimer);
+                let HH = (result/3600).toFixed(3);
+                let hhh = HH.split(".")[0];
+                let mmm = HH.split(".")[1].split("")[1];
+                if(mmm >= 60) {
+                    hhh += 1;
+                }
+                breakTime = `${hhh} hr ${mmm} min`;
+            }
+                let HH = (inputTimer/3600).toFixed(3);
+                let hh = HH.split(".")[0];
+                let mm = HH.split(".")[1].split("")[1];
+                breakTime = `${hh} hr ${mm} min`;
         }
         UserLoggerTrack.update({token: req.params.token}, { $set: { breakTime: breakTime } })
         .exec()
@@ -76,7 +135,7 @@ router.post('/:token', (req, res, next) => {
                 };
                 const appendResult = await gsapi.spreadsheets.values.update(update);
                 res.status(200).json({
-                    message: 'Status Changed'
+                    message: 'Status Changed to Active'
                 })
                 }
             })
@@ -84,6 +143,7 @@ router.post('/:token', (req, res, next) => {
                 message: err
             }))  
         })
+    })
     
 });
 
