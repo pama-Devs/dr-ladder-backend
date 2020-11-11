@@ -22,7 +22,6 @@ const loginRouter = require('./routes/login')
 const signUpRouter = require('./routes/signup')
 const logoutRouter = require('./routes/logout');
 const sheetsEditRouter = require('./routes/spreadsheetEdit');
-const sheetsFetchRouter = require('./routes/spreadsheetFetch');
 const userLoggerTrack = require('./routes/userLoggerTrack');
 const resendOTPRouter = require('./routes/resendOTP');
 const verifyNewOTPRouter = require('./routes/verifyNewOTP');
@@ -43,7 +42,6 @@ app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
 app.use('/logout', logoutRouter);
 app.use('/sheets-edit', sheetsEditRouter);
-app.use('/sheets-fetch', sheetsFetchRouter);
 app.use('/user-logger-track', userLoggerTrack);
 app.use('/resend-otp', resendOTPRouter);
 app.use('/verify-otp', verifyNewOTPRouter);
