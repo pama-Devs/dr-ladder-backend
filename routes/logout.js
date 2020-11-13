@@ -28,6 +28,11 @@ router.post('/:token', (req, res, next) => {
                 hours: dateObj.getHours(),
                 min: dateObj.getMinutes()
             }
+            let totalSec = 19800 + (userLogDetails.hours * 3600) + (userLogDetails.min * 60);
+            let hh = Math.floor(totalSec/3600);
+            totalSec %= 3600;
+            let mm = Math.floor(totalSec/60);
+            const time = `${hh}:${mm}`;
             function findMonth(month) {
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 for(let i = 1; i <= months.length; i++) {
@@ -37,7 +42,7 @@ router.post('/:token', (req, res, next) => {
                 }
             }
 
-            UserLoggerTrack.updateOne({userEmailId: result.email, date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`}, { $set: { outTime:  `${userLogDetails.hours}:${userLogDetails.min}`}})
+            UserLoggerTrack.updateOne({userEmailId: result.email, date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`}, { $set: { outTime:  `${time}`}})
             .exec()
             .then(doSomething => {
                 if(doSomething.n >= 1) {

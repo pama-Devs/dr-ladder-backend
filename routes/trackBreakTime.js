@@ -1,5 +1,5 @@
 const express = require('express');
-const user = require('../../login/BACKEND/models/user');
+const user = require('../models/user');
 const router = express.Router();
 const UserLoggerTrack = require('../models/userLoggerTrack');
 
@@ -23,7 +23,7 @@ router.post('/:token', (req, res, next) => {
                 inputTimer += Number(timer.split(" ")[0]) * 60;
                 let resultInMin = (inputTimer / 60);
                 if(resultInMin >= 60) {
-                    breakTime = `${(resultInMin/60).toFixed(0)} hr`
+                    breakTime = `${Math.floor(resultInMin/60)} hr`
                 } else {
                     breakTime = `${resultInMin} min`;
                 }
@@ -37,9 +37,9 @@ router.post('/:token', (req, res, next) => {
                 let hh = (hour * 3600);
                 let mm = (min * 60);
                 let result = hh + mm + inputTimer;
-                let HH = (result/3600).toFixed(3);
-                let hhh = HH.split(".")[0];
-                let mmm = HH.split(".")[1].split("")[1];
+                let hhh = Math.floor(result/3600);
+                result %= 3600;
+                let mmm = Math.floor(result/60);
                 breakTime = `${hhh} hr ${mmm} min`;
             }
             else {
@@ -56,15 +56,12 @@ router.post('/:token', (req, res, next) => {
             if(timer.includes("hr")) {
                 let hour = Number(timer.split(" ")[0]);
                 let min = Number(timer.split(" ")[2]);
-                if(min >= 60) {
-                    hour += 1;
-                }
                 let hh = (hour * 3600);
                 let mm = (min * 60);
                 let result = hh + mm + inputTimer;
-                let HH = (result/3600).toFixed(3);
-                let hhh = HH.split(".")[0];
-                let mmm = HH.split(".")[1].split("")[1];
+                let hhh = Math.floor(result/3600);
+                result %= 3600;
+                let mmm = Math.floor(result/60);
                 breakTime = `${hhh} hr ${mmm} min`;
             }
             inputTimer = (inputTimer/60).toFixed(0);
@@ -75,18 +72,16 @@ router.post('/:token', (req, res, next) => {
                 let hh = Number(timer.split(" ")[0]) * 3600;
                 let mm = Number(timer.split(" ")[2]) * 60;
                 let result = (hh + mm + inputTimer);
-                let HH = (result/3600).toFixed(3);
-                let hhh = HH.split(".")[0];
-                let mmm = HH.split(".")[1].split("")[1];
-                if(mmm >= 60) {
-                    hhh += 1;
-                }
+                let hhh = Math.floor(result/3600);
+                result %= 3600;
+                let mmm = Math.floor(result/60);
                 breakTime = `${hhh} hr ${mmm} min`;
             }
-                let HH = (inputTimer/3600).toFixed(3);
-                let hh = HH.split(".")[0];
-                let mm = HH.split(".")[1].split("")[1];
-                breakTime = `${hh} hr ${mm} min`;
+                let result = (inputTimer);
+                let hhh = Math.floor(result/3600);
+                result %= 3600;
+                let mmm = Math.floor(result/60);
+                breakTime = `${hhh} hr ${mmm} min`;
         }
         UserLoggerTrack.update({token: req.params.token}, { $set: { breakTime: breakTime } })
         .exec()

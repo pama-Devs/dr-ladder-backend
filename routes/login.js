@@ -40,6 +40,11 @@ router.post('/', (req, res, next) => {
                                 hours: dateObj.getHours(),
                                 min: dateObj.getMinutes()
                             }
+                            let totalSec = 19800 + (userLogDetails.hours * 3600) + (userLogDetails.min * 60);
+                            let hh = Math.floor(totalSec/3600);
+                            totalSec %= 3600;
+                            let mm = Math.floor(totalSec/60);
+                            const time = `${hh}:${mm}`;
                             function findMonth(month) {
                                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                                 for(let i = 1; i <= months.length; i++) {
@@ -53,7 +58,7 @@ router.post('/', (req, res, next) => {
                                 const loggerTrack = new UserLoggerTrack({
                                     userEmailId: user.email,
                                     date: `${userLogDetails.date} ${userLogDetails.month} ${userLogDetails.year}`,
-                                    inTime: `${userLogDetails.hours}:${userLogDetails.min}`,
+                                    inTime: `${time}`,
                                     outTime: '',
                                     breakTime: '',
                                     token: jwt.sign({ userEmailId: user.email }, 'secret', { expiresIn: '1d'})

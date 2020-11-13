@@ -75,15 +75,29 @@ router.post('/', (req, res, next) => {
 })
 
 router.delete('/', (req, res, next) => {
-    UserLoggerTrack.remove({})
-    .then(result => {
-        res.status(200).json({
-            message: 'document deleted'
+    if(req.body.email) {
+        UserLoggerTrack.deleteMany({ userEmailId: req.body.email })
+        .then(result => {
+            res.status(200).json({
+                message: 'document deleted'
+            })
         })
-    })
-    .catch(err => res.status(500).json({
-        message: 'err'
-    }))
+        .catch(err => res.status(500).json({
+            message: 'err'
+        }))
+    } else {
+        UserLoggerTrack.remove({})
+        .then(result => {
+            res.status(200).json({
+                message: 'document deleted'
+            })
+        })
+        .catch(err => res.status(500).json({
+            message: 'err'
+        }))
+    }
 })
+
+router.delete
 
 module.exports = router;
